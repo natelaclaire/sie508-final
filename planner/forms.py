@@ -24,7 +24,7 @@ class RenewBookForm(forms.Form):
 
 from django.forms import ModelForm
 
-from catalog.models import BookInstance
+from planner.models import BookInstance
 
 class RenewBookModelForm(ModelForm):
     def clean_due_back(self):

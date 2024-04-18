@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .models import Book, Author, BookInstance, Genre
+from .models import PlanType, PlanStatus, Plan, Trip, Todo, BudgetItem
 
 def index(request):
     """View function for home page of site."""
@@ -59,7 +59,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixi
 class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
-    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    template_name = 'planner/bookinstance_list_borrowed_user.html'
     paginate_by = 10
 
     def get_queryset(self):
@@ -71,9 +71,9 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
 
 class AllBorrowedListView(PermissionRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to all users."""
-    permission_required = 'catalog.can_mark_returned'
+    permission_required = 'planner.can_mark_returned'
     model = BookInstance
-    template_name = 'catalog/bookinstance_list_all_borrowed.html'
+    template_name = 'planner/bookinstance_list_all_borrowed.html'
     paginate_by = 10
 
     def get_queryset(self):
@@ -90,10 +90,10 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from catalog.forms import RenewBookForm
+from planner.forms import RenewBookForm
 
 @login_required
-@permission_required('catalog.can_mark_returned', raise_exception=True)
+@permission_required('planner.can_mark_returned', raise_exception=True)
 def renew_book_librarian(request, pk):
     """View function for renewing a specific BookInstance by librarian."""
     book_instance = get_object_or_404(BookInstance, pk=pk)
@@ -123,7 +123,7 @@ def renew_book_librarian(request, pk):
         'book_instance': book_instance,
     }
 
-    return render(request, 'catalog/book_renew_librarian.html', context)
+    return render(request, 'planner/book_renew_librarian.html', context)
 
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -134,18 +134,18 @@ class AuthorCreate(PermissionRequiredMixin, CreateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
     initial = {'date_of_death': '11/11/2023'}
-    permission_required = 'catalog.add_author'
+    permission_required = 'planner.add_author'
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     model = Author
     # Not recommended (potential security issue if more fields added)
     fields = '__all__'
-    permission_required = 'catalog.change_author'
+    permission_required = 'planner.change_author'
 
 class AuthorDelete(PermissionRequiredMixin, DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
-    permission_required = 'catalog.delete_author'
+    permission_required = 'planner.delete_author'
 
     def form_valid(self, form):
         try:

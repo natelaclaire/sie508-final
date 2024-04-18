@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=200)),
                 ('summary', models.TextField(help_text='Enter a brief description of the book', max_length=1000)),
                 ('isbn', models.CharField(help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>', max_length=13, unique=True, verbose_name='ISBN')),
-                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.RESTRICT, to='catalog.author')),
+                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.RESTRICT, to='planner.author')),
             ],
             options={
                 'ordering': ['title', 'author'],
@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('imprint', models.CharField(max_length=200)),
                 ('due_back', models.DateField(blank=True, null=True)),
                 ('status', models.CharField(blank=True, choices=[('d', 'Maintenance'), ('o', 'On loan'), ('a', 'Available'), ('r', 'Reserved')], default='d', help_text='Book availability', max_length=1)),
-                ('book', models.ForeignKey(null=True, on_delete=django.db.models.deletion.RESTRICT, to='catalog.book')),
+                ('book', models.ForeignKey(null=True, on_delete=django.db.models.deletion.RESTRICT, to='planner.book')),
                 ('borrower', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='book',
             name='genre',
-            field=models.ManyToManyField(help_text='Select a genre for this book', to='catalog.genre'),
+            field=models.ManyToManyField(help_text='Select a genre for this book', to='planner.genre'),
         ),
         migrations.AddConstraint(
             model_name='language',
@@ -87,6 +87,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='book',
             name='language',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='catalog.language'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='planner.language'),
         ),
     ]
